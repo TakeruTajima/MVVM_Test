@@ -166,7 +166,7 @@ public class ItemListFragment extends Fragment {
     }
 
     private void hoge(){
-//        ListViewModel vm = new ViewModelProvider(getViewModelStore(), getDefaultViewModelProviderFactory()).get(ListViewModel.class);
+        ListViewModel vm = new ViewModelProvider(getViewModelStore(), getDefaultViewModelProviderFactory()).get(ListViewModel.class);
 
 
         liveDataList.observe(getViewLifecycleOwner(), new Observer<List<Item>>() {
