@@ -20,6 +20,6 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="20dp"
         android:clickable="true"
-        app:srcCompat="@drawable/ic_add_black_24dp" />
+        app:srcCompat="@drawable/ic_add_foreground" />
 
 </FrameLayout>
