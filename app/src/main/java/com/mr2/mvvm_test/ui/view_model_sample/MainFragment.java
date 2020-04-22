@@ -1,4 +1,4 @@
-package com.mr2.mvvm_test.ui.main;
+package com.mr2.mvvm_test.ui.view_model_sample;
 
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;

@@ -5,7 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.mr2.mvvm_test.R;
-import com.mr2.mvvm_test.ui.main.MainFragment;
+import com.mr2.mvvm_test.ui.room_for_recycler_sample.ItemListFragment;
+import com.mr2.mvvm_test.ui.view_model_sample.MainFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -14,9 +15,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container, MainFragment.newInstance())
-                    .commitNow();
+            setListFragment();
         }
     }
+
+    private void setMainFragment(){
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, MainFragment.newInstance())
+                .commitNow();
+    }
+
+    private void setListFragment(){
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, ItemListFragment.newInstance())
+                .commitNow();
+    }
+
 }

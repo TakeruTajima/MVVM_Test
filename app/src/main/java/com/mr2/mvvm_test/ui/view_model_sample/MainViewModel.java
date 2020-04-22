@@ -1,4 +1,4 @@
-package com.mr2.mvvm_test.ui.main;
+package com.mr2.mvvm_test.ui.view_model_sample;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -23,6 +23,8 @@ public class MainViewModel extends ViewModel {
     /**
      * ViewModelクラスのインスタンス生成はViewModelProviderから取得するので
      * コンストラクタインジェクションは使えない？　Daggerの出番か。
+     * -> ViewModel内にでもstaticファクトリを実装して
+     * ViewModelProviderのコンストラクタに渡してやるとViewModelのコンストラクタも使えるっぽい
      */
     private MainRepositoryImpl repository = new MainRepositoryImpl();
 
