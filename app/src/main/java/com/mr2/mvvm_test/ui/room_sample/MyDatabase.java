@@ -6,6 +6,8 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
+import com.mr2.mvvm_test.ui.live_data_by_room.ExampleDao;
+
 import java.util.List;
 
 /**
@@ -44,6 +46,7 @@ public abstract class MyDatabase extends RoomDatabase {
      * @return Dao
      */
     public abstract ItemDao itemDao();
+    public abstract ExampleDao exampleDao();
 
     /**
      * RoomDatabase:
