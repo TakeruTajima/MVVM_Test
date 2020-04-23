@@ -35,6 +35,8 @@ public class ItemListRecyclerAdapter extends RecyclerView.Adapter<ItemListRecycl
         holder.textView.setOnClickListener(v -> {
             if (null != listener) listener.onItemClick(list.get(position));
         });
+        String s = "ID: " + list.get(position)._id;
+        holder.textId.setText(s);
     }
 
     @Override
@@ -44,10 +46,12 @@ public class ItemListRecyclerAdapter extends RecyclerView.Adapter<ItemListRecycl
 
     static class ItemListViewHolder extends RecyclerView.ViewHolder{
         TextView textView;
+        TextView textId;
         Item item;
         ItemListViewHolder(@NonNull View itemView) {
             super(itemView);
             textView = itemView.findViewById(R.id.itemListRawText);
+            textId = itemView.findViewById(R.id.itemListRawId);
         }
     }
 

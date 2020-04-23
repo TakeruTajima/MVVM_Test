@@ -68,7 +68,7 @@ public class ItemListFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         fab = view.findViewById(R.id.floatingActionButton);
         fab.setOnClickListener(v -> onClickFab());
-        hoge();
+//        hoge();
         return view;
     }
 

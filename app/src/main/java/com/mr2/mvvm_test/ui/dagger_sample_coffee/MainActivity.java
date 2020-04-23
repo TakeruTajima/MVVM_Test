@@ -1,4 +1,4 @@
-package com.mr2.mvvm_test.ui.dagger_sample;
+package com.mr2.mvvm_test.ui.dagger_sample_coffee;
 //
 //import android.support.v7.app.AppCompatActivity;
 

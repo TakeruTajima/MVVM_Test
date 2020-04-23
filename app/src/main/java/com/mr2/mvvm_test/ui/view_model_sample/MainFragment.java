@@ -47,8 +47,9 @@ public class MainFragment extends Fragment {
         binding.setLifecycleOwner(getViewLifecycleOwner()); // lifecycle ownerを設定。
         binding.setViewModel(mViewModel); // view modelを設定。
 
-        // ViewModelにobserverを設定。
-        // liveDataTextの値変更時に、第二引数のonChanged(string)としてthis::onTextChangedが呼ばれる。
+        // LiveDataにObserver(購読者)を設定。
+        // 第一引数のLifeCycleに従って購読を停止する。
+        // liveDataTextの値更新時に、第二引数のonChanged(string)としてthis::onTextChangedが呼ばれる。
         mViewModel.liveDataText.observe(getViewLifecycleOwner(), this::onTextChanged);
 //        mViewModel.liveDataText.observe(getViewLifecycleOwner(), new Observer<String>() {
 //            @Override

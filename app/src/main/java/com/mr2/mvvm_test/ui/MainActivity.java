@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.mr2.mvvm_test.R;
+import com.mr2.mvvm_test.ui.dagger_sample.SampleDaggerFragment;
 import com.mr2.mvvm_test.ui.room_for_recycler_sample.ItemListFragment;
 import com.mr2.mvvm_test.ui.view_model_sample.MainFragment;
 
@@ -28,6 +29,12 @@ public class MainActivity extends AppCompatActivity {
     private void setListFragment(){
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, ItemListFragment.newInstance())
+                .commitNow();
+    }
+
+    private void setDaggerFragment(){
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, SampleDaggerFragment.newInstance())
                 .commitNow();
     }
 

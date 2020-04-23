@@ -1,5 +1,6 @@
 package com.mr2.mvvm_test.ui.view_model_sample;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -13,8 +14,15 @@ import com.mr2.mvvm_test.MainRepositoryImpl;
  */
 public class MainViewModel extends ViewModel {
     /**
-     * MutableLiveData
-     * 自動生成されるBindingクラスによって値の変更を監視可能なデータホルダ。
+     * LiveDataとは？
+     * 値の更新を監視することができるデータホルダクラス。ViewModel内で使われることが多い。
+     * abstractなのでLiveData自体には値を更新する手段はない。
+     *
+     * MutableLiveData:
+     * postValue(若しくはsetValue)で値を更新できる。
+     * 更新されるとobserveで設定したonChangedメソッドが呼ばれる。
+     *
+     * DataBindingにより自動生成されるBindingクラスによって値の変更を監視可能。
      * tips: publicじゃないとLayoutが読んでくれない。
      */
     public MutableLiveData<String> liveDataText = new MutableLiveData<>();
