@@ -1,4 +1,4 @@
-package com.mr2.mvvm_test.ui.room_for_recycler_sample;
+package com.mr2.mvvm_test.ui.room_sample;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -6,10 +6,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mr2.mvvm_test.R;
-import com.mr2.mvvm_test.ui.room_sample.Item;
+import com.mr2.mvvm_test.ui.data_binding_for_recycler_view_sample.BaseCallback;
 
 import java.util.List;
 
@@ -61,5 +62,31 @@ public class ItemListRecyclerAdapter extends RecyclerView.Adapter<ItemListRecycl
 
     public void setListener(OnItemClickListener listener){
         this.listener = listener;
+    }
+
+    public DiffUtil.Callback getDiffUtilCallback(List<Item> newList){
+        return new Callback(list, newList);
+    }
+
+    public void update(List<Item> newList){
+        this.list = newList;
+    }
+
+    public static class Callback extends BaseCallback<List>{
+        Callback(List<Item> oldList, List<Item> newList) {
+            super(oldList, newList);
+        }
+
+        @Override
+        public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+            Item oldItem = (Item) oldList.get(oldItemPosition);
+            Item newItem = (Item) newList.get(newItemPosition);
+            String oldName = null;
+            String newName = null;
+            if (null != oldItem) oldName = oldItem.name;
+            if (null != newItem) newName = newItem.name;
+            if (oldName != null) return oldName.equals(newName);
+            else return newName == null;
+        }
     }
 }

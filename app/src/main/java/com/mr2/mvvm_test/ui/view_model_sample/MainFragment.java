@@ -1,19 +1,19 @@
 package com.mr2.mvvm_test.ui.view_model_sample;
 
-import androidx.core.content.ContextCompat;
-import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.content.Context;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.databinding.BindingAdapter;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.mr2.mvvm_test.R;
 import com.mr2.mvvm_test.databinding.MainFragmentBinding;
@@ -79,5 +79,10 @@ public class MainFragment extends Fragment {
             mViewModel.liveDataColor.postValue(ContextCompat.getColor(context, R.color.colorPrimaryDark));
         else
             mViewModel.liveDataColor.postValue(ContextCompat.getColor(context, R.color.colorAccent));
+    }
+
+    @BindingAdapter("custom_setter")
+    public static void customSetter(TextView textView, String liveData){
+        System.out.println("Custom setter called. Live data value is `" + liveData + "`." );
     }
 }

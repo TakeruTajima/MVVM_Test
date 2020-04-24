@@ -7,6 +7,7 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 import com.mr2.mvvm_test.ui.live_data_by_room.ExampleDao;
+import com.mr2.mvvm_test.ui.live_data_by_room.ExampleData;
 
 import java.util.List;
 
@@ -25,8 +26,8 @@ import java.util.List;
  * -> annotationProcessorOptions 内に以下の行を追加する。
  *  arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
  */
-@Database(entities = {Item.class}, version = 1, exportSchema = true)
-public abstract class MyDatabase extends RoomDatabase {
+@Database(entities = {Item.class, ExampleData.class}, version = 1, exportSchema = true)
+public abstract class MyDatabase extends RoomDatabase { //TODO: version上げないとかも
     private static MyDatabase instance;
 
     /**

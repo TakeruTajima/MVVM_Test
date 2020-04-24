@@ -1,4 +1,4 @@
-package com.mr2.mvvm_test.ui.room_for_recycler_sample;
+package com.mr2.mvvm_test.ui.room_sample;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -10,18 +10,14 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.LiveData;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mr2.mvvm_test.R;
 import com.mr2.mvvm_test.ui.TextInputDialogFragment;
-import com.mr2.mvvm_test.ui.room_sample.Item;
-import com.mr2.mvvm_test.ui.room_sample.ItemDao;
-import com.mr2.mvvm_test.ui.room_sample.MyDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +33,6 @@ public class ItemListFragment extends Fragment {
     private Context context;
     private RecyclerView recyclerView;
     private FloatingActionButton fab;
-    private MutableLiveData<List<Item>> liveDataList;
 
     public static ItemListFragment newInstance(){
         return new ItemListFragment();
@@ -66,7 +61,6 @@ public class ItemListFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         fab = view.findViewById(R.id.floatingActionButton);
         fab.setOnClickListener(v -> onClickFab());
-//        hoge();
         return view;
     }
 
@@ -74,6 +68,7 @@ public class ItemListFragment extends Fragment {
     public void onResume() {
         super.onResume();
         fetchListByRoom();
+        setCountObserve();
     }
 
     private void showToast(String message){
@@ -124,19 +119,18 @@ public class ItemListFragment extends Fragment {
             @Override
             public void run() {
                 dao.delete(item);
-                list = dao.getAllNameAsc();
+                List<Item> list = dao.getAllNameAsc();
                 if (null == getActivity()) return;
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        onLoadComplete();
-                        showToast("deleted.");
+//                        onLoadComplete();
+                        loadData(recyclerView, list);
+                        showToast(item.name + "deleted.");
                     }
                 });
             }
         }).start();
-//        ExampleDao exampleDao = MyDatabase.getInstance(context).exampleDao();
-//        LiveData<List<ExampleData>> listLiveData = exampleDao.getAllLiveData();
     }
 
     private void onClickFab(){
@@ -152,30 +146,52 @@ public class ItemListFragment extends Fragment {
             @Override
             public void run() {
                 dao.insert(item);
-                list = dao.getAllNameAsc();
+                List<Item> list = dao.getAllNameAsc();
                 if (null == getActivity()) return;
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         showToast("item created.");
-                        onLoadComplete();
+//                        onLoadComplete();
+                        loadData(recyclerView, list);
                     }
                 });
             }
         }).start();
     }
 
-    private void hoge(){
-        ListViewModel vm = new ViewModelProvider(getViewModelStore(), getDefaultViewModelProviderFactory()).get(ListViewModel.class);
-
-
-        liveDataList.observe(getViewLifecycleOwner(), new Observer<List<Item>>() {
-            @Override
-            public void onChanged(List<Item> item) {
-                list = item;
-                onLoadComplete();
+    /**
+     * RoomからLiveDataとして取り出したデータはDBが更新されるたびにobserverを呼ぶ。
+     * これでViewModel内のLiveDataをLayoutのほうでcustomSetterにBindしてやれば
+     * DB更新のたびにcustomSetterが呼ばれる。
+     */
+    private void setCountObserve(){
+        ItemDao dao = MyDatabase.getInstance(context).itemDao();
+        new Thread(()-> {
+            LiveData<Integer> liveCount = dao.count();
+            if (null != getActivity()) {
+                getActivity().runOnUiThread(()-> {
+                    liveCount.observe(this, integer -> {
+                        System.out.println("Live data onChanged. Count is `" + integer + "`.");
+                    });
+                });
             }
-        });
+        }).start();
+    }
+
+    /**
+     * custom setter
+     * LiveDataのListをAdapterにしてSet
+     * @param recyclerView  BindingAdapterを設定したView自身
+     * @param newList customSetterの引数はMutableLiveDataだが実際に渡されるのはString？
+     */
+//    @BindingAdapter("recycler_adapter")
+    public static void loadData(RecyclerView recyclerView, List<Item> newList){
+        ItemListRecyclerAdapter adapter = (ItemListRecyclerAdapter) recyclerView.getAdapter();
+        if (null == adapter) return;
+        DiffUtil.DiffResult result = DiffUtil.calculateDiff(adapter.getDiffUtilCallback(newList), true);
+        adapter.update(newList);
+        result.dispatchUpdatesTo(adapter);
     }
 }
 

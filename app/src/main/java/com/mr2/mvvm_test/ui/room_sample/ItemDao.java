@@ -2,7 +2,6 @@ package com.mr2.mvvm_test.ui.room_sample;
 
 import androidx.lifecycle.LiveData;
 import androidx.paging.DataSource;
-import androidx.paging.PagedList;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -27,8 +26,10 @@ public interface ItemDao {
     List<Item> getAll();
     @Query("select * from item order by name asc")
     List<Item> getAllNameAsc();
-    @Query("select * from item")
+    @Query("select * from item order by name asc")
     LiveData<List<Item>> getAllByLiveData();
     @Query("select * from item order by name asc")
     DataSource.Factory<Integer,Item> getAllByDataSource();
+    @Query("select COUNT(*) from item")
+    LiveData<Integer> count();
 }

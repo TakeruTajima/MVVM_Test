@@ -1,12 +1,12 @@
 package com.mr2.mvvm_test.ui;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.mr2.mvvm_test.R;
 import com.mr2.mvvm_test.ui.dagger_sample.SampleDaggerFragment;
-import com.mr2.mvvm_test.ui.room_for_recycler_sample.ItemListFragment;
+import com.mr2.mvvm_test.ui.room_sample.ItemListFragment;
 import com.mr2.mvvm_test.ui.view_model_sample.MainFragment;
 
 public class MainActivity extends AppCompatActivity {

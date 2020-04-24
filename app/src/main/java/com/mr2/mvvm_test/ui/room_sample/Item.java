@@ -1,9 +1,10 @@
 package com.mr2.mvvm_test.ui.room_sample;
 
 import androidx.annotation.NonNull;
-import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+
+import java.util.Objects;
 
 /**
  * Room用データモデルの作成にはクラス定義の頭に@Entityアノテーションを付ける。
@@ -30,5 +31,18 @@ public class Item {
 
     public Item(@NonNull String name) {
         this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Item)) return false;
+        Item item = (Item) o;
+        return _id == item._id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(_id);
     }
 }
