@@ -1,13 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-
+        <variable
+            name="view_model"
+            type="com.mr2.mvvm_test.ui.data_binding_for_recycler_view_sample.ListViewModel" />
     </data>
 
-    <androidx.recyclerview.widget.RecyclerView
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </androidx.recyclerview.widget.RecyclerView>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/binding_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            recycler_adapter="@{view_model.liveList}">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floatingActionButton5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="20dp"
+            android:clickable="true"
+            app:srcCompat="@drawable/ic_add_black_24dp" />
+
+    </FrameLayout>
 </layout>

@@ -8,7 +8,23 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.BindingAdapter;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.mr2.mvvm_test.R;
+import com.mr2.mvvm_test.databinding.BindingListFragmentBinding;
+import com.mr2.mvvm_test.ui.TextInputDialogFragment;
+import com.mr2.mvvm_test.ui.room_sample.Item;
+import com.mr2.mvvm_test.ui.room_sample.ItemDao;
+import com.mr2.mvvm_test.ui.room_sample.ItemListRecyclerAdapter;
+import com.mr2.mvvm_test.ui.room_sample.MyDatabase;
+
+import java.util.List;
 
 
 public class BindingListFragment extends Fragment {
@@ -19,6 +35,13 @@ public class BindingListFragment extends Fragment {
 
     private View view = null;
     private Context context;
+    private ListViewModel listViewModel;
+    private BindingListFragmentBinding binding;
+
+    public static BindingListFragment newInstance(){
+        return new BindingListFragment();
+    }
+
     /* Example */
 //    private BindingListFragmentListener listener = null;
 
@@ -54,13 +77,21 @@ public class BindingListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
+        assert getActivity() != null;
+        listViewModel = new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication()).create(ListViewModel.class);
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView");
 //        view = inflater.inflate(R.layout./*このフラグメントで使用するレイアウトのID*/, container, false);
-        return view;
+        binding = DataBindingUtil.inflate(inflater, R.layout.binding_list_fragment, container, false);
+        binding.setLifecycleOwner(this);
+        binding.setViewModel(listViewModel);
+        binding.floatingActionButton5.setOnClickListener(this::onClickAddButton);
+        assert null != binding.bindingRecyclerView.getAdapter();
+        ((ItemListRecyclerAdapter) binding.bindingRecyclerView.getAdapter()).setListener(this::onClickItem);
+        return binding.getRoot();
     }
 
     @Override
@@ -85,6 +116,7 @@ public class BindingListFragment extends Fragment {
     public void onResume() {
         super.onResume();
         Log.d(TAG, "onResume");
+        listViewModel.fetchItemList();
     }
 
     @Override
@@ -125,5 +157,60 @@ public class BindingListFragment extends Fragment {
 //    public static void bindItems(RecyclerView recyclerView, String s){
 //
 //    }
+
+    /**
+     * RoomからLiveDataとして取り出したデータはDBが更新されるたびにobserverを呼ぶ。
+     * これでViewModel内のLiveDataをLayoutのほうでcustomSetterにBindしてやれば
+     * DB更新のたびにcustomSetterが呼ばれる。
+     */
+    private void setCountObserve(){
+        ItemDao dao = MyDatabase.getInstance(context).itemDao();
+        new Thread(()-> {
+            LiveData<Integer> liveCount = dao.count();
+            if (null != getActivity()) {
+                getActivity().runOnUiThread(()-> {
+                    liveCount.observe(this, integer -> {
+                        System.out.println("Live data onChanged. Count is `" + integer + "`.");
+                    });
+                });
+            }
+        }).start();
+    }
+
+    /**
+     * custom setter
+     * LiveDataのListをAdapterにしてSet
+     * @param recyclerView  BindingAdapterを設定したView自身
+     * @param newList customSetterの引数はMutableLiveDataだが実際に渡されるのはString？
+     */
+    @BindingAdapter("recycler_adapter")
+    public static void loadData(RecyclerView recyclerView, List<Item> newList){
+        ItemListRecyclerAdapter adapter = (ItemListRecyclerAdapter) recyclerView.getAdapter();
+        if (null == adapter) {
+            recyclerView.setAdapter(new ItemListRecyclerAdapter(newList));
+            return;
+        }
+        DiffUtil.DiffResult result = DiffUtil.calculateDiff(adapter.getDiffUtilCallback(newList), true);
+        adapter.update(newList);
+        result.dispatchUpdatesTo(adapter);
+    }
+
+
+
+    //fabから
+    public void onClickAddButton(View view){
+        TextInputDialogFragment dialog = TextInputDialogFragment.newInstance("テキストを入力してください。");
+        dialog.setOnDialogResultListener(this::onDialogResult); //Listener復帰は？
+        dialog.show(getChildFragmentManager(), "");
+    }
+
+    public void onDialogResult(String s){
+        listViewModel.insertItem(s);
+    }
+
+    //recyclerView.adapterから
+    public void onClickItem(Item item){
+        listViewModel.deleteItem(item);
+    }
 }
 

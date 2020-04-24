@@ -146,6 +146,7 @@ public class ItemListFragment extends Fragment {
             @Override
             public void run() {
                 dao.insert(item);
+//                list = dao.getAllNameAsc();
                 List<Item> list = dao.getAllNameAsc();
                 if (null == getActivity()) return;
                 getActivity().runOnUiThread(new Runnable() {
