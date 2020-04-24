@@ -5,6 +5,8 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.mr2.mvvm_test.MyApplication;
 import com.mr2.mvvm_test.ui.room_sample.Item;
@@ -39,6 +41,8 @@ public class ListViewModel extends AndroidViewModel {
     }
 
     public void deleteItem(Item item){
+        String s = "ID:" + item._id + " " + item.name + " delete.";
+        System.out.println(s);
         ItemDao dao = app.db.itemDao();
         new Thread(()->{
             dao.delete(item);
@@ -53,23 +57,17 @@ public class ListViewModel extends AndroidViewModel {
         }).start();
     }
 
+    public static class Factory implements ViewModelProvider.Factory {
+        String s;
 
-//    private ItemDao dao;
-//    private static final int PAGE_SIZE = 50;
-//    public LiveData<PagedList<Item>> pagedListLiveDataItem;
-//
-//    public ListViewModel(ItemDao dao){
-//        this.dao = dao;
-//        pagedListLiveDataItem = new LivePagedListBuilder<>(dao.getAllByDataSource(), PAGE_SIZE).build();
-//    }
-//
-//    public static class Factory implements ViewModelProvider.Factory {
-//        private ItemDao dao;
-//
-//        @NonNull
-//        @Override
-//        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-//            return null;
-//        }
-//    }
+        public Factory(String s) {
+            this.s = s;
+        }
+
+        @NonNull
+        @Override
+        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+            return null;
+        }
+    }
 }

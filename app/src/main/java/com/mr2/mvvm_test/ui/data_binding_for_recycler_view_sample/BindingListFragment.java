@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mr2.mvvm_test.R;
@@ -79,6 +80,7 @@ public class BindingListFragment extends Fragment {
         Log.d(TAG, "onCreate");
         assert getActivity() != null;
         listViewModel = new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication()).create(ListViewModel.class);
+        listViewModel.fetchItemList();
     }
 
     @Override
@@ -89,6 +91,8 @@ public class BindingListFragment extends Fragment {
         binding.setLifecycleOwner(this);
         binding.setViewModel(listViewModel);
         binding.floatingActionButton5.setOnClickListener(this::onClickAddButton);
+        binding.bindingRecyclerView.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
+        loadData(binding.bindingRecyclerView, listViewModel.liveList.getValue());
         assert null != binding.bindingRecyclerView.getAdapter();
         ((ItemListRecyclerAdapter) binding.bindingRecyclerView.getAdapter()).setListener(this::onClickItem);
         return binding.getRoot();
@@ -116,7 +120,6 @@ public class BindingListFragment extends Fragment {
     public void onResume() {
         super.onResume();
         Log.d(TAG, "onResume");
-        listViewModel.fetchItemList();
     }
 
     @Override
@@ -187,7 +190,8 @@ public class BindingListFragment extends Fragment {
     public static void loadData(RecyclerView recyclerView, List<Item> newList){
         ItemListRecyclerAdapter adapter = (ItemListRecyclerAdapter) recyclerView.getAdapter();
         if (null == adapter) {
-            recyclerView.setAdapter(new ItemListRecyclerAdapter(newList));
+            adapter = new ItemListRecyclerAdapter(newList);
+            recyclerView.setAdapter(adapter);
             return;
         }
         DiffUtil.DiffResult result = DiffUtil.calculateDiff(adapter.getDiffUtilCallback(newList), true);
@@ -210,6 +214,9 @@ public class BindingListFragment extends Fragment {
 
     //recyclerView.adapterから
     public void onClickItem(Item item){
+        List<Item> list = listViewModel.liveList.getValue();
+        String s = "item position is `" + list.indexOf(item) + "` from liveList.";
+        System.out.println(s);
         listViewModel.deleteItem(item);
     }
 }

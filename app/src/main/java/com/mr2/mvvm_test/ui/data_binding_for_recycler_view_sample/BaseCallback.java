@@ -15,10 +15,10 @@ public abstract class BaseCallback<T extends List> extends DiffUtil.Callback {
     }
 
     @Override
-    public int getOldListSize() { return oldList.size(); }
+    public int getOldListSize() { return null != oldList ? oldList.size() : 0; }
 
     @Override
-    public int getNewListSize() { return newList.size(); }
+    public int getNewListSize() { return null != newList ? newList.size() : 0; }
 
     /**
      * 識別子等で見て同一オブジェクトならTrue、違うならFalse。
