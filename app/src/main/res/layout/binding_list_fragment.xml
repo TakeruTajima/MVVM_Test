@@ -5,7 +5,7 @@
     <data>
         <variable
             name="view_model"
-            type="com.mr2.mvvm_test.ui.data_binding_for_recycler_view_sample.ListViewModel" />
+            type="com.mr2.mvvm_test.sample.data_binding_for_recycler_view_sample.ListViewModel" />
     </data>
 
     <FrameLayout

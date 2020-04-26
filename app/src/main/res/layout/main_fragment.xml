@@ -10,7 +10,7 @@
     <data>
         <variable
             name="view_model"
-            type="com.mr2.mvvm_test.ui.view_model_sample.MainViewModel" />
+            type="com.mr2.mvvm_test.sample.view_model_sample.MainViewModel" />
         <import type="androidx.core.content.ContextCompat"/>
 <!--        <import type="android.view.View"/>-->
     </data>
@@ -18,7 +18,7 @@
         android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.view_model_sample.MainFragment">
+        tools:context=".sample.view_model_sample.MainFragment">
 
         <!--        android:text="@={view_model.liveDataText}"
                                    ^
