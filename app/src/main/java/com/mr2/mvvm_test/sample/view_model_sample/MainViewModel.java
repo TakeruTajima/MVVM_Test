@@ -46,4 +46,14 @@ public class MainViewModel extends ViewModel {
     void fetchText(){
 //        liveDataText.postValue(repository.fetchText());
     }
+
+//    @Query("select e.name as e_name, p.model as model, c.name as c_name, sum(quantity) as quantity, e.price_value as value, e.price_name as name, e.unit as unit\n" +
+//            "from products as p\n" +
+//            "inner join equipments as e\n" +
+//            "on p._id = e.product_id\n" +
+//            "inner join companies as c\n" +
+//            "on p.company_id = c._id\n" +
+//            "left outer join storage_locations as s\n" +
+//            "on e._id = s.equipment_id\n" +
+//            "group by e._id")
 }
