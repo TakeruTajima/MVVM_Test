@@ -1,6 +1,7 @@
 package com.mr2.mvvm_test.sample.room_sample;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mr2.mvvm_test.R;
 import com.mr2.mvvm_test.sample.MyDatabase;
-import com.mr2.mvvm_test.sample.TextInputDialogFragment;
+import com.mr2.my_genelic_ui_library.dialog.PromptDialogFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -135,9 +136,16 @@ public class ItemListFragment extends Fragment {
     }
 
     private void onClickFab(){
-        TextInputDialogFragment fragment = TextInputDialogFragment.newInstance("テキストを入力してください。");
-        fragment.setOnDialogResultListener(this::onDialogResult);
-        fragment.show(getChildFragmentManager(), "");
+        PromptDialogFragment dialog = new PromptDialogFragment.Builder("新規登録", "登録する")
+                .setHint("アイテム名")
+                .setNegativeButton("cancel")
+                .setMessage("アイテム名を入力してください")
+                .setListener((dialog1, which, input) -> {
+                    if (DialogInterface.BUTTON_POSITIVE == which) onDialogResult(input);
+                    dialog1.dismiss();
+                })
+                .create();
+        dialog.show(getChildFragmentManager(), "");
     }
 
     private void onDialogResult(String s){

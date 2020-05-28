@@ -1,6 +1,7 @@
 package com.mr2.mvvm_test.sample.data_binding_for_recycler_view_sample;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,10 +21,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.mr2.mvvm_test.R;
 import com.mr2.mvvm_test.databinding.BindingListFragmentBinding;
 import com.mr2.mvvm_test.sample.MyDatabase;
-import com.mr2.mvvm_test.sample.TextInputDialogFragment;
 import com.mr2.mvvm_test.sample.room_sample.Item;
 import com.mr2.mvvm_test.sample.room_sample.ItemDao;
 import com.mr2.mvvm_test.sample.room_sample.ItemListRecyclerAdapter;
+import com.mr2.my_genelic_ui_library.dialog.PromptDialogFragment;
 
 import java.util.List;
 
@@ -203,8 +204,15 @@ public class BindingListFragment extends Fragment {
 
     //fabから
     public void onClickAddButton(View view){
-        TextInputDialogFragment dialog = TextInputDialogFragment.newInstance("テキストを入力してください。");
-        dialog.setOnDialogResultListener(this::onDialogResult); //Listener復帰は？
+        PromptDialogFragment dialog = new PromptDialogFragment.Builder("新規登録", "登録する")
+                .setHint("アイテム名")
+                .setNegativeButton("cancel")
+                .setMessage("アイテム名を入力してください")
+                .setListener((dialog1, which, input) -> {
+                    if (DialogInterface.BUTTON_POSITIVE == which) onDialogResult(input);
+                    dialog1.dismiss();
+                })
+                .create();
         dialog.show(getChildFragmentManager(), "");
     }
 

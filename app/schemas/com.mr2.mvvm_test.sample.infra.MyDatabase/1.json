@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "27fdf5c4b97bbb094c5f92b84cf839fc",
+    "identityHash": "ca6f9626e7ec63d6eb283da69930a8ca",
     "entities": [
       {
         "tableName": "external_barcode",
@@ -291,7 +291,7 @@
       },
       {
         "tableName": "storage_locations",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` TEXT NOT NULL, `equipment_id` TEXT, `name` TEXT, `quantity` INTEGER NOT NULL, `condition` TEXT, PRIMARY KEY(`_id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` TEXT NOT NULL, `equipment_id` TEXT, `name` TEXT, `quantity` INTEGER NOT NULL, `max_quantity` INTEGER NOT NULL, `condition` TEXT, PRIMARY KEY(`_id`))",
         "fields": [
           {
             "fieldPath": "_id",
@@ -314,6 +314,12 @@
           {
             "fieldPath": "quantity",
             "columnName": "quantity",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "max_quantity",
+            "columnName": "max_quantity",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -346,7 +352,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"27fdf5c4b97bbb094c5f92b84cf839fc\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"ca6f9626e7ec63d6eb283da69930a8ca\")"
     ]
   }
 }

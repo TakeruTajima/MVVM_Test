@@ -1,5 +1,6 @@
 package com.mr2.mvvm_test.sample.dagger_and_view_model;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.mr2.mvvm_test.R;
 import com.mr2.mvvm_test.databinding.ExampleFragmentBinding;
-import com.mr2.mvvm_test.sample.TextInputDialogFragment;
+import com.mr2.my_genelic_ui_library.dialog.PromptDialogFragment;
 
 public class InjectFragment extends Fragment {
     public InjectViewModel viewModel;
@@ -40,8 +41,15 @@ public class InjectFragment extends Fragment {
     }
 
     void showInputDialog(View view){
-        TextInputDialogFragment dialog = TextInputDialogFragment.newInstance("入力してください。");
-        dialog.setOnDialogResultListener(this::onDialogResult);
+        PromptDialogFragment dialog = new PromptDialogFragment.Builder("新規登録", "登録する")
+                .setHint("アイテム名")
+                .setNegativeButton("cancel")
+                .setMessage("アイテム名を入力してください")
+                .setListener((dialog1, which, input) -> {
+                    if (DialogInterface.BUTTON_POSITIVE == which) onDialogResult(input);
+                    dialog1.dismiss();
+                })
+                .create();
         dialog.show(getChildFragmentManager(), "");
     }
 
