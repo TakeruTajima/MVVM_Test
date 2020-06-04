@@ -187,7 +187,7 @@ public class BindingListFragment extends Fragment {
      * @param recyclerView  BindingAdapterを設定したView自身
      * @param newList customSetterの引数はMutableLiveDataだが実際に渡されるのはString？
      */
-    @BindingAdapter("recycler_adapter")
+    @BindingAdapter("bind:viewModels")
     public static void loadData(RecyclerView recyclerView, List<Item> newList){
         ItemListRecyclerAdapter adapter = (ItemListRecyclerAdapter) recyclerView.getAdapter();
         if (null == adapter) {
